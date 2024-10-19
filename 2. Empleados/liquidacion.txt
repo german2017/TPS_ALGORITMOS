@@ -1,0 +1,6 @@
+Santiago
+: $1400.0
+Mateo
+: $5200.0
+Valentina
+: $6440.0
