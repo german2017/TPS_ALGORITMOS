@@ -1,19 +1,19 @@
 Estructura Empleado
-    nombre Es Cadena
-    sueldo_anual Es Real
-    matriz_datos Es Numerico[3, 12] // Matriz para horas, valor y sueldo mensual
+    cadena nombre
+    flotante sueldo_anual
+    entero matriz_datos[3][12] // Matriz para horas, valor y sueldo mensual
 FinEstructura
 
 Proceso Principal
     Definir nomina Como Cadena
-    Definir lista_empleados Como Empleado[10] // Lista de empleados (ejemplo con 10)
+    Definir lista_empleados Como Empleado[30] // Lista de empleados
     Definir cantidad Como Entero
     
     // 1. Obtiene nómina de empleados
     nomina = obtener_nomina()
 
     // 2. Pedir datos de los empleados y cargar la lista
-    cantidad <- Longitud(nomina)
+    cantidad = nomina.largo
     cargar_datos_empleados(nomina, cantidad, lista_empleados)
 
     // 3. Calcular sueldo anual de cada empleado
@@ -38,46 +38,47 @@ Proceso Principal
     guardar_sueldos(lista_empleados, cantidad)
 FinProceso
 
-Proceso obtener_nomina
-    Definir nombres Como Cadena
-    nombres <- []
-
-    archivo <- Abrir("2. Empleados\\nomina.txt", LEER)
+Proceso obtener_nomina()
+    Cadena nombres[]
+    Entero i = 1
+    archivo = AbrirArchivo("2. Empleados\\nomina.txt", "LECTURA")
     Mientras NO FinArchivo(archivo)
-        nombre <- LeerLinea(archivo)
-        nombres[Longitud(nombres) + 1] <- nombre
+        nombre = LeerLinea(archivo)
+        nombres[i] <- nombre
+        i++
     FinMientras
-    Cerrar(archivo)
 
-    Devolver nombres
+    CerrarArchivo(archivo)
+
+    retornar nombres
 FinProceso
 
 Proceso cargar_datos_empleados(nomina, cantidad, lista_empleados)
-    Para i <- 1 Hasta cantidad Con Paso 1
+    Para(Entero i = 1; i <= cantidad; i++)
         // Crear un nuevo empleado y asignar nombre
-        lista_empleados[i].nombre <- nomina[i]
-        lista_empleados[i].sueldo_anual <- 0
+        lista_empleados[i].nombre = nomina[i]
+        lista_empleados[i].sueldo_anual = 0
 
         Escribir "Carga de datos para el empleado: ", lista_empleados[i].nombre
 
         // Pedir datos por mes
-        Para j <- 1 Hasta 12 Con Paso 1
+        Para(Entero  j = 1; j <= 12; j++)
             Escribir "Mes ", j
             Leer horas
             Leer valor
             sueldo <- horas * valor
-            lista_empleados[i].matriz_datos[1, j] <- horas
-            lista_empleados[i].matriz_datos[2, j] <- valor
-            lista_empleados[i].matriz_datos[3, j] <- sueldo
+            lista_empleados[i].matriz_datos[1][j] <- horas
+            lista_empleados[i].matriz_datos[2][j] <- valor
+            lista_empleados[i].matriz_datos[3][j] <- sueldo
         FinPara
     FinPara
 FinProceso
 
 Proceso calcular_sueldo_anual(lista_empleados, cantidad)
-    Para i <- 1 Hasta cantidad Con Paso 1
+    Para(Entero  i = 1 ; i <= cantidad; i++)
         Escribir lista_empleados[i].nombre
-        Para j <- 1 Hasta 12 Con Paso 1
-            lista_empleados[i].sueldo_anual <- lista_empleados[i].sueldo_anual + lista_empleados[i].matriz_datos[3, j]
+        Para(Entero  j = 1; j <= 12; j++)
+            lista_empleados[i].sueldo_anual = lista_empleados[i].sueldo_anual + lista_empleados[i].matriz_datos[3][j]
             Escribir lista_empleados[i].sueldo_anual, "\t"
         FinPara
         Escribir ""
@@ -85,12 +86,12 @@ Proceso calcular_sueldo_anual(lista_empleados, cantidad)
 FinProceso
 
 Proceso calcular_total_sueldos_mensuales(lista_empleados, cantidad)
-    Para i <- 1 Hasta cantidad Con Paso 1
-        Definir suma_anual Como Real
-        suma_anual <- 0
+    Flotante suma_anual
+    suma_anual = 0
+    Para(Entero  i = 1 ; i <= cantidad; i++)
 
-        Para j <- 1 Hasta 12 Con Paso 1
-            suma_anual <- suma_anual + lista_empleados[i].matriz_datos[3, j]
+        Para(Entero j = 1; j <= 12; j++)
+            suma_anual = suma_anual + lista_empleados[i].matriz_datos[3][j]
         FinPara
 
         Escribir "El sueldo anual de: ", lista_empleados[i].nombre, " es: ", suma_anual
@@ -98,13 +99,12 @@ Proceso calcular_total_sueldos_mensuales(lista_empleados, cantidad)
 FinProceso
 
 Proceso calcular_maximo_sueldo_mensual(lista_empleados, cantidad)
-    Para mes <- 1 Hasta 12 Con Paso 1
-        Definir maximo_sueldo Como Real
-        maximo_sueldo <- 0
-
-        Para i <- 1 Hasta cantidad Con Paso 1
-            Si lista_empleados[i].matriz_datos[3, mes] > maximo_sueldo Entonces
-                maximo_sueldo <- lista_empleados[i].matriz_datos[3, mes]
+    Flotante maximo_sueldo 
+    Para(Entero mes = 1; mes <=  12; mes++)
+        maximo_sueldo = 0
+        Para(Entero i = 1; i <= cantidad; i++)
+            Si lista_empleados[i].matriz_datos[3][mes] > maximo_sueldo Entonces
+                maximo_sueldo = lista_empleados[i].matriz_datos[3][mes]
             FinSi
         FinPara
 
@@ -113,27 +113,27 @@ Proceso calcular_maximo_sueldo_mensual(lista_empleados, cantidad)
 FinProceso
 
 Proceso calcular_porcentaje_sueldo(lista_empleados, cantidad, que_mes)
-    Definir total, porcentaje Como Real
-    total <- 0
+    Flotante total, porcentaje
+    total = 0
 
-    Para i <- 1 Hasta cantidad Con Paso 1
-        total <- total + lista_empleados[i].matriz_datos[3, que_mes]
+    Para(Entero i = 1; i <= cantidad; i++)
+        total = total + lista_empleados[i].matriz_datos[3][que_mes]
     FinPara
 
-    Para i <- 1 Hasta cantidad Con Paso 1
-        porcentaje <- (lista_empleados[i].matriz_datos[3, que_mes] / total) * 100
+    Para(Entero i = 1; i <= cantidad; i++)
+        porcentaje = (lista_empleados[i].matriz_datos[3][que_mes] / total) * 100
         Escribir "El sueldo de ", lista_empleados[i].nombre, " representa el ", porcentaje, "% del mes ", que_mes
     FinPara
 FinProceso
 
 Proceso calcular_menor_sueldo_semestre(lista_empleados, cantidad)
-    Definir minimo Como Real
-    minimo <- lista_empleados[1].matriz_datos[3, 1]
+    Flotante minimo
+    minimo = lista_empleados[1].matriz_datos[3][1]
 
-    Para i <- 1 Hasta cantidad Con Paso 1
-        Para j <- 1 Hasta 6 Con Paso 1
-            Si lista_empleados[i].matriz_datos[3, j] < minimo Entonces
-                minimo <- lista_empleados[i].matriz_datos[3, j]
+    Para(Entero i = 1; i <= cantidad; i++)
+        Para(Entero j = 1; j <= 6; j++)
+            Si lista_empleados[i].matriz_datos[3][j] < minimo Entonces
+                minimo = lista_empleados[i].matriz_datos[3][j]
             FinSi
         FinPara
     FinPara
@@ -141,9 +141,9 @@ Proceso calcular_menor_sueldo_semestre(lista_empleados, cantidad)
     Escribir "El sueldo mínimo es: ", minimo
     Escribir "Los empleados que tienen el sueldo mínimo son:"
 
-    Para i <- 1 Hasta cantidad Con Paso 1
-        Para j <- 1 Hasta 6 Con Paso 1
-            Si lista_empleados[i].matriz_datos[3, j] = minimo Entonces
+    Para(Entero i = 1; i <= cantidad; i++)
+        Para(Entero j = 1; j <= 6; j++)
+            Si lista_empleados[i].matriz_datos[3][j] = minimo Entonces
                 Escribir lista_empleados[i].nombre
             FinSi
         FinPara
@@ -151,19 +151,19 @@ Proceso calcular_menor_sueldo_semestre(lista_empleados, cantidad)
 FinProceso
 
 Proceso calcular_cantidad_meses_mayor_4millones(lista_empleados, cantidad)
-    Definir contador Como Entero
-    contador <- 0
+    Entero contador
+    contador = 0
 
-    Para mes <- 1 Hasta 12 Con Paso 1
-        Definir suma_sueldos Como Real
-        suma_sueldos <- 0
+    Para(Entero mes = 1; mes <=  12; mes++)
+        Flotante suma_sueldos
+        suma_sueldos = 0
 
-        Para i <- 1 Hasta cantidad Con Paso 1
-            suma_sueldos <- suma_sueldos + lista_empleados[i].matriz_datos[3, mes]
+        Para(Entero i = 1; i <= cantidad; i++)
+            suma_sueldos = suma_sueldos + lista_empleados[i].matriz_datos[3][mes]
         FinPara
 
         Si suma_sueldos > 4000000 Entonces
-            contador <- contador + 1
+            contador = contador + 1
         FinSi
     FinPara
 
@@ -174,20 +174,20 @@ Proceso guardar_sueldos(lista_empleados, cantidad)
     ordenar_lista(lista_empleados, cantidad)
 
     archivo <- Abrir("liquidacion.txt", ESCRIBIR)
-    Para i <- 1 Hasta cantidad Con Paso 1
-        EscribirArchivo(archivo, lista_empleados[i].nombre, ": $", lista_empleados[i].sueldo_anual)
+    Para(Entero i = 1; i <= cantidad; i++)
+        EscribirLinea(archivo, lista_empleados[i].nombre, ": $", lista_empleados[i].sueldo_anual)
     FinPara
-    Cerrar(archivo)
+    CerrarArchivo(archivo)
 FinProceso
 
 Proceso ordenar_lista(lista_empleados, cantidad)
-    Para i <- 1 Hasta cantidad - 1 Con Paso 1
-        Para j <- i + 1 Hasta cantidad Con Paso 1
+    Empleado temp
+    Para(Entero i = 1; i <= cantidad - 1; i++)
+        Para(Entero j = i+1; j <= cantidad; i++)
             Si lista_empleados[i].sueldo_anual > lista_empleados[j].sueldo_anual Entonces
-                Definir temp Como Empleado
-                temp <- lista_empleados[i]
-                lista_empleados[i] <- lista_empleados[j]
-                lista_empleados[j] <- temp
+                temp = lista_empleados[i]
+                lista_empleados[i] = lista_empleados[j]
+                lista_empleados[j] = temp
             FinSi
         FinPara
     FinPara

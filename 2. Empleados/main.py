@@ -144,7 +144,7 @@ nomina = obtener_nomina()
 # 1. Pedir al usuario para cada empleado: cantidad de hs por mes, valor y calcular el sueldo mensual.
 # lista_empleados: list['Empleado'] = cargar_datos_empleados_hardcodeo(empleados)
 
-lista_empleados: list["Empleado"] = cargar_datos_empleados(nomina)
+lista_empleados: list["Empleado"] = cargar_datos_empleados(nomina, 30)
 # 2.Sueldo anual de cada empleado:
 calcular_sueldo_anual(lista_empleados)
 
