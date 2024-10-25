@@ -1,0 +1,212 @@
+ESTRUCTURA Pagina
+	ENTERO numPagina
+	Letra [] letras
+FIN ESTRUCTURA
+
+ESTRUCTURA Letra
+	CADENA fuenteTexto
+	CADENA colorLetra
+	CADENA colorFondo
+	CADENA caracter
+FIN ESTRUCTURA
+
+ESTRUCTURA Revista
+	PAGINA[] paginas
+	ENTERO cantPaginas
+	CADENA nombre
+FIN ESTRUCTURA
+
+ESTRUCTURA Punto1
+	CADENA nombreRevista
+	ENTER numPagina
+FIN ESTRUCTURA
+
+ESTRUCTURA Venta
+	CADENA nombreRevista
+	CADENA comprador
+FIN ESTRUCTURA
+
+ESTRUCTURA Sospechoso
+	CADENA nombre
+	CADENA revistas[8]
+FIN ESTRUCTURA
+
+ESTRUCTURA NodoSospechoso:
+	Sospechoso sospechoso
+	NodoSospechoso siguiente
+FIN ESTRUCTURA
+NodoSospechoso listaSospechosos = nulo
+
+Letra[] letras //datos de la notas.
+Revista[] revistas // datos de revistas
+Venta[] ventas // datos de ventas ej: [{nombreRevista: "Revista Futbol", comprador: "Juan Perez"}]
+
+ResolucionPunto1(letras,revistas)
+
+ResolucionPunto2(ventas)
+
+////////////////////////////////////////////////FUNCIONES RESOLUCION PUNTO2///////////////////////////////////////
+
+FUNCION ResolucionPunto2(ventas)
+
+	HACER
+		Punto1 punto1 = ObtenerPunto1()//desencolar
+
+		SI(punto1 != nulo)
+		
+			PARA (z=0, z<ventas.largo, z++) 
+
+				SI(ventas[z].nombreRevista == punto1.nombreRevista)
+			
+					SI(existeSospechoso(listaSospechosos,ventas[z].comprador))
+
+						AgregarRevistaComprada(listaSospechosos,ventas[z])
+					SINO
+						AgregarSospechoso(listaSospechosos,ventas[z])
+				FIN SI
+
+			FIN PARA
+		FIN SI
+
+	MIENTRAS (punto1 != nulo)
+
+
+
+FUNCION existeSospechoso(listaSospechosos,nombreSospechoso):BOOLEANO
+
+	NodoSospechoso nodo_actual = listaSospechosos
+	HACER
+		SI (nodo_actual.sospechoso.nombre == nombreSospechoso)
+			
+			RETORNAR true
+		FIN SI
+		
+		nodo_actual = nodo_actual.siguiente
+	MIENTRAS (nodo_actual.siguiente !=nulo)
+	
+	RETORNAR false
+
+
+FUNCION AgregarRevistaComprada(listaSospechosos,venta)
+	
+	NodoSospechoso nodo_actual = listaSospechosos
+	BOOLEANO encontrado=false
+	HACER
+		SI (nodo_actual.sospechoso.nombre == venta.comprador)
+			encontrado =true		
+		FIN SI
+		SI (encontrado==false)
+			nodo_actual = nodo_actual.siguiente
+		FIN SI
+	MIENTRAS (estado==false)
+
+
+	BOOLEANO existe = false
+	PARA(i=1; i <= 8 ;i++)
+		SI(nodo_actual.sospechoso.revistas[i]==venta.nombreRevista)
+			existe = true
+		FIN SI
+	FIN PARA
+	SI(existe==false)
+		PARA(j=1; j <= 8 ;j++)
+			SI(nodo_actual..sospechoso.revistas[i]=="")
+				sospechoso.revistas[i] = venta.nombreRevista
+				RETORNAR sospechoso
+			FIN SI
+		FIN PARA	
+	FIN SI
+
+
+
+FUNCION AgregarSospechoso(listaSospechosos,venta)
+	Sospechoso nuevoSospechoso
+	nuevoSospechoso.nombre = venta.comprador
+	nuevoSospechoso.revistas[0] = venta.nombreRevista
+
+	NodoSospechoso nodo_nuevo
+	nodo_nuevo.sospechoso = nuevoSospechoso
+
+	nuevo_nodo.siguiente = listaSospechosos
+	listaSospechosos = nodo_nuevo
+
+////////////////////////////////////////////////FIN FUNCIONES RESOLUCION PUNTO2///////////////////////////////////////
+
+
+////////////////////////////////////////////////FUNCIONES RESOLUCION PUNTO1///////////////////////////////////////
+
+FUNCION ResolucionPunto1(letras,revistas)
+
+	PARA (i=0, i<letras.largo, i++) 
+		PARA (j=0, j<revistas.largo, j++) 
+			PUNTO1 punto1
+			punto1 = BuscarRevista(revista[j],letras[i])
+			SI (punto1 != nulo)
+				AgregarPunto1(punto1)//encolar
+				j=revistas.largo			
+			FIN SI
+		FIN PARA
+	FIN PARA
+
+
+FUNCION BuscarLetra(pagina,letra):BOOLEANO
+	
+	PARA (i=0, i<pagina.letras.largo, i++) 
+	
+		SI(pagina.letra[i] == letra)
+			RETORNAR true
+		FIN SI
+	FIN PARA
+	
+	RETORNAR false
+	
+
+
+FUNCION BuscarRevista(revista,letra): Punto1
+	PUNTO1 punto1 
+
+	PARA (i=0, i<revista.cantPaginas, i++) 
+
+		SI (BuscarLetra(revista.paginas[i],letra))
+			punto1.nombreRevista = revista[i].nombre
+			punto1.numPagina = revista.paginas[i].numPagina
+			RETONAR punto1
+		FIN SI
+
+	FIN PARA
+	RETORNAR NULO;
+///////////////////////////////////////////////////FIN FUNCIONES RESOLUCION PUNTO1///////////////////////////////////////
+
+/////////////////////////////////////////////////// ENCOLAR Y DESENCOLAR PUNTO1 ////////////////////////////////////////
+
+ESTRUCTURA NodoPunto1
+	Punto1 punto1
+	Nodo siguiente
+FIN ESTRUCTURA
+
+
+NodoPunto1 nodo_frontal, nodo_trasero
+
+FUNCION AgregarPunto1(punto1) //Encolar
+	NodoPunto1 nuevo_nodo
+	nuevo_nodo.punto1 = punto1
+	nuevo_nodo.siguiente = nulo
+    SI (nodo_frontal == nulo)
+		nodo_frontal = nuevo_nodo
+		nodo_trasero = nuevo_nodo
+	SINO
+		nodo_frontal.siguiente = nuevo_nodo
+		nodo_trasero = nuevo_nodo
+	FIN SI
+
+FUNCION ObtenerPunto1(): Punto1 //Desencolar
+	Punto1 punto1;
+	SI (nodo_frontal != Nulo)
+		punto1 = nodo_frontal.punto1
+		nodo_frontal = nodo_frontal.siguiente
+		RETORNAR punto1
+	SINO
+		RETORNAR nulo
+	FIN SI
+
+
+////////////////////////////////////////////////// FIN ENCOLAR Y DESENCOLAR PUNTO1 ///////////////////////////////////////////

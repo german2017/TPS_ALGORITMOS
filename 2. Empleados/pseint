@@ -5,9 +5,8 @@ Estructura Empleado
 FinEstructura
 
 Proceso Principal
-    Definir nomina Como Cadena
-    Definir lista_empleados Como Empleado[30] // Lista de empleados
-    Definir cantidad Como Entero
+    Empleado lista_empleados[30]// Lista de empleados
+    Entero cantidad
     
     // 1. Obtiene nómina de empleados
     nomina = obtener_nomina()
@@ -44,7 +43,7 @@ Proceso obtener_nomina()
     archivo = AbrirArchivo("2. Empleados\\nomina.txt", "LECTURA")
     Mientras NO FinArchivo(archivo)
         nombre = LeerLinea(archivo)
-        nombres[i] <- nombre
+        nombres[i] = nombre
         i++
     FinMientras
 
@@ -67,9 +66,9 @@ Proceso cargar_datos_empleados(nomina, cantidad, lista_empleados)
             Leer horas
             Leer valor
             sueldo <- horas * valor
-            lista_empleados[i].matriz_datos[1][j] <- horas
-            lista_empleados[i].matriz_datos[2][j] <- valor
-            lista_empleados[i].matriz_datos[3][j] <- sueldo
+            lista_empleados[i].matriz_datos[1][j] = horas
+            lista_empleados[i].matriz_datos[2][j] = valor
+            lista_empleados[i].matriz_datos[3][j] = sueldo
         FinPara
     FinPara
 FinProceso
