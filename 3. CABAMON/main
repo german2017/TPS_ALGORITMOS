@@ -13,12 +13,14 @@ Estructura NodoPila
 Fin Estructura
 
 INICIO
+    CADENA matriz_elementos[5][2]={{"fuego","aire"}{"electricidad","agua"},{"aire","tierra"},{"agua","fuego"},{"tierra","electricidad"}}
     Carta mazo[250]
     NodoPila pila_jugador1
     NodoPila pila_jugador2
     NodoPila pila_mesa
     CADENA atributo
     CADENA ganador_ronda
+    
     //cargar las cartas desde el archivo al mazo
     
     mezclar(mazo)
@@ -30,41 +32,42 @@ INICIO
         carta_jugador_2 = Desapilar(pila_jugador2)
         
         SI atributo == "elemento"
-            //LOGICA AMPLIADA SEGUN LOS ELEMENTOS
+            elemento_jugador_1 = carta_jugador_1.elemento
+            elemento_jugador_2 = carta_jugador_2.elemento
+            
+            PARA(ENTERO i = 1; i <= 5; i++)
+                SI elemento_jugador_1 == matriz_elementos[i][1]
+                    a_quien_le_gana = matriz_elementos[i][2]
+                    ROMPER
+                FIN SI
+            FIN PARA
+            SI elemento_jugador_2 == a_quien_le_gana
+                //2 cartas en juego
+                //le  robo 2 al 2
+                
+
         SINO
             valor_jugador_1 = obtener_valor(carta_jugador_1, atributo)
             valor_jugador_2 = obtener_valor(carta_jugador_2, atributo)
     
             SI valor_jugador_1 > valor_jugador_2
-                ganador_ronda = "1"
-            SINO SI valor_jugador_1 < valor_jugador_2
-                ganador_ronda = "2"
-            SINO
-                ganador_ronda = "Empate"
-            FIN SI
-        FIN SI
-
-        SI ganador_ronda == "1"
-            SI pila_mesa.LARGO > 0
-                sumar_pilas(pila_jugador1, pila_mesa)
-            FIN SI
-            recoger_cartas(pila_jugador1, carta_jugador_1, carta_jugador_2)            
-        SINO
-            SI ganador_ronda == "2"
                 SI pila_mesa.LARGO > 0
-                    sumar_pilas(pila_jugador2, pila_mesa)
+                    sumar_pilas(pila_jugador1, pila_mesa)
                 FIN SI
-                recoger_cartas(pila_jugador2, carta_jugador_2, carta_jugador_1)
-            SINO
+                recoger_cartas(pila_jugador1, carta_jugador_1, carta_jugador_2)            
+            SINO 
+                SI valor_jugador_1 < valor_jugador_2
+                    SI pila_mesa.LARGO > 0
+                        sumar_pilas(pila_jugador2, pila_mesa)
+                    FIN SI
+                    recoger_cartas(pila_jugador2, carta_jugador_2, carta_jugador_1)
+                SINO
                 Apilar(pila_mesa, carta_jugador_1)
                 Apilar(pila_mesa, carta_jugador_2)
             FIN SI
         FIN SI
-
-
-
     FIN PARA
-
+    verificar_ganador(pila_jugador1, pila_jugador2)
 
 
 FIN
@@ -174,93 +177,12 @@ FIN FUNCION
 
 
 //Función ganador del juego
-FUNCION ganador
-    SI tamaño(Jugador 1) > tamaño(Jugador 2):
-        imprimir("Gano Jugador 1 con", tamaño(Jugador1), "cartas")
-    SINO  tamaño (Jugador 2) > tamaño(Jugador 1)
-    	Imprimir("Gano Jugador 2 con", tamaño(Jugador 2), "cartas")
+FUNCION verificar_ganador(pila_jugador_1, pila_jugador_2)
+    SI pila_jugador_1.LARGO > pila_jugador_2.LARGO:
+        imprimir("Gano Jugador 1 con", pila_jugador_1.LARGO , "cartas")
+    SINO  pila_jugador_1.LARGO < pila_jugador_2.LARGO:
+        Imprimir("Gano Jugador 2 con", pila_jugador_2.LARGO, "cartas")
     SINO
-    	Imprimir("Es empate")
+        Imprimir("Es empate")
         FIN SI
 FIN FUNCION
-
-
-//garbage
-
-//   SELECCION atributo
-//             caso "velocidad"
-//                 SI carta_jugador_1.fuerza > carta_jugador_2.fuerza
-//                     ganador_ronda = "1"
-//                 SINO
-//                     SI carta_jugador_1.fuerza < carta_jugador_2.fuerza
-//                         ganador_ronda = "2"
-//                     SINO
-//                         ganador_ronda = "Empate"
-//                     FIN SI
-//                 FIN SI
-//             romper
-//             caso "fuerza"
-//                 SI carta_jugador_1.fuerza > carta_jugador_2.fuerza
-//                     ganador_ronda = "1"
-//                 SINO
-//                     SI carta_jugador_1.fuerza < carta_jugador_2.fuerza
-//                         ganador_ronda = "2"
-//                     SINO
-//                         ganador_ronda = "Empate"
-//                     FIN SI
-//                 FIN SI
-//             romper
-//             caso "elemento"//ACA VER PORQUE APLICA OTRA LOGICA
-//                 // SI carta_jugador_1.fuerza > carta_jugador_2.fuerza
-//                 //         ganador_ronda = "1"
-//                 // SINO
-//                 //     SI carta_jugador_1.fuerza < carta_jugador_2.fuerza
-//                 //         ganador_ronda = "2"
-//                 //     SINO
-//                 //         ganador_ronda = "Empate"
-//                 //     FIN SI
-//                 // FIN SI
-//             romper
-//             caso "peso"
-//                 SI carta_jugador_1.peso > carta_jugador_2.peso
-//                         ganador_ronda = "1"
-//                 SINO
-//                     SI carta_jugador_1.peso < carta_jugador_2.peso
-//                         ganador_ronda = "2"
-//                     SINO
-//                         ganador_ronda = "Empate"
-//                     FIN SI
-//                 FIN SI
-//             romper
-//             caso "altura"
-//                 SI carta_jugador_1.altura > carta_jugador_2.altura
-//                     ganador_ronda = "1"
-//                 SINO
-//                     SI carta_jugador_1.altura < carta_jugador_2.altura
-//                         ganador_ronda = "2"
-//                     SINO
-//                         ganador_ronda = "Empate"
-//                     FIN SI
-//                 FIN SI
-//             romper
-// //Función ronda (250)
-// FUNCION ronda
-//     Jugador 1 = Carta [] //Nodo
-//     Jugador 2 = Carta [] //Nodo
-//     Mesa = Carta [] //Nodo
-//     PARA (i=1, i=250, i++)  // ronda de 1 a 250
-//     Jugador 1 Desencolar Carta 2
-//     Jugador 2 Desencolar Carta 1
-//     Jugada = sorteo (Atributo) // Velocidad, Fuerza, Elemento, Peso, Altura
-//         SI Carta2 (atributo) > Carta1 (atributo)
-//             Encolar (Jugador 1, Carta 1)
-//             Encolar (Jugador 1, Carta 2)
-//             Encolar (Jugador 1, Desapilar Mesa)
-//         SINO 
-//             Encolar (Jugador2, Carta2)
-//             Encolar (Jugador2, Carta1)
-//             Encolar (Jugador 2, Desapilar Mesa)
-//         SINO Apilar (Mesa, Carta1, Carta 2)
-//         FIN SI
-//     FIN PARA
-// FIN FUNCION

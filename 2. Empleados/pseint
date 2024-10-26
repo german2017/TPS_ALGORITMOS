@@ -172,7 +172,7 @@ FinProceso
 Proceso guardar_sueldos(lista_empleados, cantidad)
     ordenar_lista(lista_empleados, cantidad)
 
-    archivo <- Abrir("liquidacion.txt", ESCRIBIR)
+    archivo = Abrir("liquidacion.txt", ESCRIBIR)
     Para(Entero i = 1; i <= cantidad; i++)
         EscribirLinea(archivo, lista_empleados[i].nombre, ": $", lista_empleados[i].sueldo_anual)
     FinPara
