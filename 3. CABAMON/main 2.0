@@ -14,62 +14,62 @@ Fin Estructura
 
 INICIO
     CADENA matriz_elementos[5][2]={{"fuego","aire"}{"electricidad","agua"},{"aire","tierra"},{"agua","fuego"},{"tierra","electricidad"}}
-    Carta mazo[250]
+    // Carta mazo[250] EL MAZO NO DEBERIA SER UNA PILA??? porque sino nunca sacamos la carta del mazo
     NodoPila pila_jugador1
     NodoPila pila_jugador2
     NodoPila pila_mesa
+    
     CADENA atributo
     CADENA ganador_ronda
+    CADENA bandera
     
-    //cargar las cartas desde el archivo al mazo
-    
-    mezclar(mazo)
-    repartir(mazo, pila_jugador1, pila_jugador2)
+    mazo = obtener_mazo()//desde archivo
+    mezclar(&mazo)
+    repartir(&mazo, pila_jugador1, pila_jugador2)
 
-    PARA(ENTERO i = 1; i <= 250 O (pila_jugador1.LARGO == 0 O pila_jugador2.LARGO == 0); i++)
+    PARA(ENTERO i = 1; i <= 250 O (pila_jugador1.LARGO == 0 O pila_jugador2.LARGO == 0); i++)//TODO ESTO PODRIA IR A UNA FUNCION, ver si vale la
+    //pena seguir modularizaando
+        bandera = FALSO
+        
         atributo = sortearAtributo()
+        
         carta_jugador_1 = Desapilar(pila_jugador1)
         carta_jugador_2 = Desapilar(pila_jugador2)
-        
+
         SI atributo == "elemento"
             elemento_jugador_1 = carta_jugador_1.elemento
             elemento_jugador_2 = carta_jugador_2.elemento
             
-            buscar_elemento_quien_gana(elemento_jugador_1, CADENA matriz_elementos)
+            a_quien_le_gana = buscar_elemento_quien_gana(elemento_jugador_1, CADENA matriz_elementos)
 
             SI elemento_jugador_2 == a_quien_le_gana // Gano el elemento del jugador 1
-                //2 cartas en juego
-                robo1 = Desapilar(pila_jugador2)
-                robo2 = Desapilar(pila_jugador2)
-                //le  robo 2 al 2
-                SI pila_mesa.LARGO > 0
-                    sumar_pilas(pila_jugador1, pila_mesa)
-                FIN SI
-                recoger_cartas(pila_jugador1, carta_jugador_1, carta_jugador_2)
-                recoger_cartas(pila_jugador1, robo1, robo2)            
+                pila_robo = &pila_jugador2  //refencio la pila robo a la pila de donde tengo que sacar dos cartas          
                 bandera = VERDADERO
             FIN SI
             SI bandera != VERDADERO
-                buscar_elemento_quien_gana(elemento_jugador_2, CADENA matriz_elementos)
-
-                SI elemento_jugador_1 == a_quien_le_gana // Gano el elemento del jugador 1
-                    //2 cartas en juego
-                    robo1 = Desapilar(pila_jugador1)
-                    robo2 = Desapilar(pila_jugador1)
-                    //le  robo 2 al 2
-                    SI pila_mesa.LARGO > 0
-                        sumar_pilas(pila_jugador2, pila_mesa)
-                    FIN SI
-                    recoger_cartas(pila_jugador2, carta_jugador_1, carta_jugador_2)
-                    recoger_cartas(pila_jugador2, robo1, robo2)            
-
+                a_quien_le_gana = buscar_elemento_quien_gana(elemento_jugador_2, CADENA matriz_elementos)
+                SI elemento_jugador_1 == a_quien_le_gana // Gano el elemento del jugador 2
+                    pila_robo = &pila_jugador1
                 FIN SI
+                bandera = VERDADERO
             FIN SI
-
+            SI bandera == VERDADERO //Si alguno gano por elemento
+                //2 cartas en juego
+                robo1 = Desapilar(pila_robo)
+                robo2 = Desapilar(pila_robo)
+                //le  robo 2 al 2
+                SI pila_mesa.LARGO > 0
+                    sumar_pilas(pila_robo, pila_mesa)
+                FIN SI
+                recoger_cartas(pila_robo, carta_jugador_1, carta_jugador_2)
+                recoger_cartas(pila_robo, robo1, robo2)
+            SINO//SI NO GANO NINGUNO
+                imprimir "Hubo empate en elemento. Nadie gana"
+            
         SINO
             valor_jugador_1 = obtener_valor(carta_jugador_1, atributo)
             valor_jugador_2 = obtener_valor(carta_jugador_2, atributo)
-    
+            //SE PUEDE ACHICAR
             SI valor_jugador_1 > valor_jugador_2
                 SI pila_mesa.LARGO > 0
                     sumar_pilas(pila_jugador1, pila_mesa)
@@ -195,16 +195,15 @@ FUNCION mezclar (Carta[] mazo)
 FIN FUNCION
 
 //Función repartir cartas
-FUNCION repartir (Carta mazo, pila_jugador1, pila_jugador2)
+FUNCION repartir (Carta mazo[], NodoPila pila_jugador1, NodoPila pila_jugador2)
 	PARA (i=1; i <= 250; i++)
         SI i % 2 == 0
-            Apilar(pila_jugador1, mazo[i]) //Carta2, Carta4…. Carta 124
+            Apilar(pila_jugador1, mazo[i]) 
         SINO
-            Apilar(pila_jugador2, mazo[i]) //Carta 1, Carta3…. Carta 125
+            Apilar(pila_jugador2, mazo[i])
         FIN SI    	
     FIN PARA
 FIN FUNCION
-
 
 //Función ganador del juego
 FUNCION verificar_ganador(pila_jugador_1, pila_jugador_2)
@@ -216,3 +215,30 @@ FUNCION verificar_ganador(pila_jugador_1, pila_jugador_2)
         Imprimir("Es empate")
         FIN SI
 FIN FUNCION
+
+FUNCION obtener_mazo()
+
+    Carta una_carta
+    Carta mazo[250]
+
+    Cadena nombres[]
+    Entero i = 1
+    archivo = AbrirArchivo("cabamon.txt", "LECTURA")
+    Mientras NO FinArchivo(archivo)
+        linea = LeerLinea(archivo)
+        una_carta.nombre = linea[1]
+        una_carta.velocidad = ENTERO(linea[2])
+        una_carta.fuerza = ENTERO(linea[3])
+        una_carta.elemento = linea[4]
+        una_carta.peso = ENTERO(linea[5])
+        una_carta.altura = ENTERO(linea[6])
+        mazo[i] = una_carta
+        i++
+    FinMientras
+
+    CerrarArchivo(archivo)
+
+    retornar mazo
+FIN FUNCION
+
+Pokemon_195,148,194,electricidad,32.01,1.8
