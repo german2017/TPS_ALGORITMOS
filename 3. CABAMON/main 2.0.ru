@@ -27,7 +27,8 @@ INICIO
     mezclar(&mazo)
     repartir(&mazo, pila_jugador1, pila_jugador2)
 
-    PARA(ENTERO i = 1; i <= 250 O (pila_jugador1.LARGO == 0 O pila_jugador2.LARGO == 0); i++)//TODO ESTO PODRIA IR A UNA FUNCION, ver si vale la
+    PARA(ENTERO i = 1; i <= 250 O (pila_jugador1.LARGO == 0 O pila_jugador2.LARGO == 0); i++)
+    //TODO ESTO PODRIA IR A UNA FUNCION, ver si vale la
     //pena seguir modularizaando
         bandera = FALSO
         
@@ -188,6 +189,7 @@ FIN FUNCION
 
 //Función mezclar cartas
 FUNCION mezclar (Carta[] mazo)
+    ENTERO j = 10
 	PARA (Entero i = 250, i>=1, i--)
         j = numero_aleatorio(1, j)
         intercambiar(mazo[i], mazo[j])
@@ -221,7 +223,7 @@ FUNCION obtener_mazo()
     Carta una_carta
     Carta mazo[250]
 
-    Cadena nombres[]
+
     Entero i = 1
     archivo = AbrirArchivo("cabamon.txt", "LECTURA")
     Mientras NO FinArchivo(archivo)
@@ -240,5 +242,3 @@ FUNCION obtener_mazo()
 
     retornar mazo
 FIN FUNCION
-
-Pokemon_195,148,194,electricidad,32.01,1.8
