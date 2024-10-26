@@ -16,6 +16,7 @@ INICIO
     Carta mazo[250]
     NodoPila pila_jugador1
     NodoPila pila_jugador2
+    NodoPila pila_mesa
     CADENA atributo
     CADENA ganador_ronda
     //cargar las cartas desde el archivo al mazo
@@ -44,12 +45,19 @@ INICIO
         FIN SI
 
         SI ganador_ronda == "1"
+            SI pila_mesa.LARGO > 0
+                sumar_pilas(pila_jugador1, pila_mesa)
+            FIN SI
             recoger_cartas(pila_jugador1, carta_jugador_1, carta_jugador_2)            
         SINO
             SI ganador_ronda == "2"
-                recoger_cartas(pila_jugador2, carta_jugador_1, carta_jugador_2)
+                SI pila_mesa.LARGO > 0
+                    sumar_pilas(pila_jugador2, pila_mesa)
+                FIN SI
+                recoger_cartas(pila_jugador2, carta_jugador_2, carta_jugador_1)
             SINO
-                //ACA VAN A LA MESA
+                Apilar(pila_mesa, carta_jugador_1)
+                Apilar(pila_mesa, carta_jugador_2)
             FIN SI
         FIN SI
 
@@ -60,6 +68,19 @@ INICIO
 
 
 FIN
+
+FUNCION sumar_pilas(pila_jugador, pila_mesa)
+    aux = mover_pila(pila_jugador1)  
+    MIENTRAS pila_mesa.LARGO > 0
+        c = Desapilar(pila_mesa)
+        Apilar(pila_jugador1, c)
+    FIN MIENTRAS
+    MIENTRAS aux.LARGO > 0
+        c = Desapilar(aux)
+        Apilar(pila_jugador1, c)
+    FIN MIENTRAS
+
+
 
 FUNCION mover_pila(&pila_jugador)
     NodoPila pila_auxiliar
@@ -125,9 +146,15 @@ FUNCION Desapilar(NodoPila &pila_jugador): Carta
     return carta_jugada
 FIN FUNCION
 
+FUNCION intercambiar(Carta &una_carta, Carta &otra_carta)
+    Carta auxiliar
+    auxiliar = una_carta
+    una_carta = otra_carta
+    otra_carta = auxiliar
+FIN FUNCION
 
 //Función mezclar cartas
-FUNCION mezclar (Carta mazo)
+FUNCION mezclar (Carta[] mazo)
 	PARA (Entero i = 250, i>=1, i--)
         j = numero_aleatorio(1, j)
         intercambiar(mazo[i], mazo[j])
@@ -145,27 +172,6 @@ FUNCION repartir (Carta mazo, pila_jugador1, pila_jugador2)
     FIN PARA
 FIN FUNCION
 
-//Función ronda (250)
-FUNCION ronda
-    Jugador 1 = Carta [] //Nodo
-    Jugador 2 = Carta [] //Nodo
-    Mesa = Carta [] //Nodo
-    PARA (i=1, i=250, i++)  // ronda de 1 a 250
-    Jugador 1 Desencolar Carta 2
-    Jugador 2 Desencolar Carta 1
-    Jugada = sorteo (Atributo) // Velocidad, Fuerza, Elemento, Peso, Altura
-        SI Carta2 (atributo) > Carta1 (atributo)
-            Encolar (Jugador 1, Carta 1)
-            Encolar (Jugador 1, Carta 2)
-            Encolar (Jugador 1, Desapilar Mesa)
-        SINO 
-            Encolar (Jugador2, Carta2)
-            Encolar (Jugador2, Carta1)
-            Encolar (Jugador 2, Desapilar Mesa)
-        SINO Apilar (Mesa, Carta1, Carta 2)
-        FIN SI
-    FIN PARA
-FIN FUNCION
 
 //Función ganador del juego
 FUNCION ganador
@@ -237,3 +243,24 @@ FIN FUNCION
 //                     FIN SI
 //                 FIN SI
 //             romper
+// //Función ronda (250)
+// FUNCION ronda
+//     Jugador 1 = Carta [] //Nodo
+//     Jugador 2 = Carta [] //Nodo
+//     Mesa = Carta [] //Nodo
+//     PARA (i=1, i=250, i++)  // ronda de 1 a 250
+//     Jugador 1 Desencolar Carta 2
+//     Jugador 2 Desencolar Carta 1
+//     Jugada = sorteo (Atributo) // Velocidad, Fuerza, Elemento, Peso, Altura
+//         SI Carta2 (atributo) > Carta1 (atributo)
+//             Encolar (Jugador 1, Carta 1)
+//             Encolar (Jugador 1, Carta 2)
+//             Encolar (Jugador 1, Desapilar Mesa)
+//         SINO 
+//             Encolar (Jugador2, Carta2)
+//             Encolar (Jugador2, Carta1)
+//             Encolar (Jugador 2, Desapilar Mesa)
+//         SINO Apilar (Mesa, Carta1, Carta 2)
+//         FIN SI
+//     FIN PARA
+// FIN FUNCION
