@@ -40,13 +40,14 @@ Sospechoso sospechoso
 NodoSospechoso siguiente
 FIN ESTRUCTURA	
 
-ESTRUCTURA NodoRevista//cola
+ESTRUCTURA NodoRevista # cola
 	Revista una_revista
 	NodoRevista siguiente
 FIN ESTRUCTURA
 
 
 NodoSospechoso listaSospechosos = NULO
+NodoRevista nodo_frontal, nodo_trasero
 
 INICIO
 	TipoLetra tipo_letra []
@@ -68,16 +69,10 @@ INICIO
 	#venta : {nombreRevista: "Revista Musica", comprador: "Juan Perez"}
 	lista_ventas = obtener_ventas("ventas.txt")
 
-	ResolucionPunto1(letras_nota, lista_revistas)
-
-
-
+	identificar_revistas(letras_nota, lista_revistas)
+	identificar_sospechosos(lista_ventas)
 
 FIN
-
-
-
-NodoRevista nodo_frontal, nodo_trasero
 
 FUNCION encolar_revista(Revista una_revista) //Encolar
 	NodoRevista nuevo_nodo
@@ -92,19 +87,27 @@ FUNCION encolar_revista(Revista una_revista) //Encolar
 	FIN SI
 FIN FUNCION
 
-
-# ////////////////////////////////////////////////FUNCIONES RESOLUCION PUNTO1///////////////////////////////////////
-
-FUNCION ResolucionPunto1(Letra letras_nota[], Revista revistas[]): Revista[] 
-	Revista revistas_coincidencia[]
+FUNCION desencolar_revista(): Revista //Desencolar
 	Revista una_revista
-	PARA (i=1, i <= letras_nota.largo, i++) 
-		PARA (j=1, j <= revistas.largo, j++) 
+	una_revista = NULO
+	SI (nodo_frontal != NULO)
+		una_revista = nodo_frontal.una_revista
+		nodo_frontal = nodo_frontal.siguiente
+	FIN SI
+
+	RETORNAR una_revista
+FIN FUNCION
+
+FUNCION identificar_revistas(Letra letras_nota[], Revista revistas[])#: Revista[] 
+# Revista revistas_coincidencia[]
+	Revista una_revista
+	PARA (i=1, i <= letras_nota.largo, i++) #Por cada letra de la nota
+		PARA (j=1, j <= revistas.largo, j++) #por cada revista
 
 			una_revista = BuscarRevista(revista[j],letras[i])
 
 			SI (una_revista != nulo)
-				encolar_revista(una_revista)//encolar
+				encolar_revista(una_revista)#Si encuentra la letra en la revista, encola esa revista 
 				ROMPER			
 			FIN SI	
 		FIN PARA	
@@ -144,29 +147,8 @@ FUNCION BuscarLetra(letrasPagina,letra):BOOLEANO
 	
 	RETORNAR encontro
 FIN FUNCION
-# /////////////////////////////////////////////////// ENCOLAR Y DESENCOLAR PUNTO1 ////////////////////////////////////////
-	
 
-FUNCION desencolar_revista(): Revista //Desencolar
-	Revista una_revista
-	una_revista = NULO
-	SI (nodo_frontal != NULO)
-		una_revista = nodo_frontal.una_revista
-		nodo_frontal = nodo_frontal.siguiente
-	FIN SI
-
-	RETORNAR una_revista
-FIN FUNCION
-
-
-	////////////////////////////////////////////////// FIN ENCOLAR Y DESENCOLAR PUNTO1 ///////////////////////////////////////////
-
-
-///////////////////////////////////////////////////FIN FUNCIONES RESOLUCION PUNTO1///////////////////////////////////////
-
-////////////////////////////////////////////////FUNCIONES RESOLUCION PUNTO2///////////////////////////////////////
-
-FUNCION ResolucionPunto2(ventas)
+FUNCION identificar_sospechosos(ventas)
 
 	HACER
 		Punto1 punto1 = ObtenerPunto1()//desencolar
@@ -238,7 +220,7 @@ FUNCION AgregarRevistaComprada(listaSospechosos,venta)
 			FIN SI
 		FIN PARA	
 	FIN SI
-
+FIN FUNCION
 
 
 FUNCION AgregarSospechoso(listaSospechosos,venta)
@@ -251,5 +233,41 @@ FUNCION AgregarSospechoso(listaSospechosos,venta)
 
 	nuevo_nodo.siguiente = listaSospechosos
 	listaSospechosos = nodo_nuevo
+FIN FUNCION
 
-////////////////////////////////////////////////FIN FUNCIONES RESOLUCION PUNTO2///////////////////////////////////////
+###############LISTAS######################
+
+FUNCION insertar_nodo(lista, posicion, dato)
+	NODO nuevo_nodo.producto = producto
+	nodo_actual = lista
+	SI (posicion == 0)
+		nuevo_nodo.siguiente = lista
+		lista = nuevo_nodo
+	SINO
+	#Hacer las validaciones antes del PARA.
+		PARA (i=1; i <= posicion; i++) 
+			nodo_actual = nodo_actual.siguiente
+			SI (i == posicion-1)
+				nuevo_nodo.siguiente = nodo_actual.siguiente
+				nodo_actual.siguiente = nuevo_nodo
+			FIN SI
+		FIN PARA
+	FIN SI
+FIN FUNCION
+
+FUNCION eliminar_nodo(lista, posicion)
+    SI lista != NULO Y posicion >= 1 O posicion <= lista.LARGO# Validaciones antes del PARA.
+		nodo_actual = lista
+		PARA (i=1; i <= posicion; i++) 
+			SI (nodo_actual != nulo)
+				nodo_actual = nodo_actual.siguiente
+				SI (i == posicion-1)
+					nodo_eliminar = nodo_actual.siguiente
+					nodo_actual.siguiente = nodo_eliminar.siguiente
+				FIN SI
+			FIN SI
+		FIN PARA
+		ELIMINAR nodo_eliminar // En programación suele ser automático 
+	FIN SI
+	RETORNAR lista
+FIN FUNCION
