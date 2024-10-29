@@ -47,7 +47,7 @@ FIN ESTRUCTURA
 
 
 NodoSospechoso listaSospechosos = NULO
-NodoRevista nodo_frontal, nodo_trasero
+NodoRevista nodo_frontal, nodo_trasero #COLA DE REVISTAS SOSPECHOSAS
 
 INICIO
 	TipoLetra tipo_letra []
@@ -69,7 +69,7 @@ INICIO
 	#venta : {nombreRevista: "Revista Musica", comprador: "Juan Perez"}
 	lista_ventas = obtener_ventas("ventas.txt")
 
-	identificar_revistas(letras_nota, lista_revistas)
+	identificar_revistas(letras_nota, lista_revistas)# Agrega todas las revistas sospechosas a la cola de revistas
 	identificar_sospechosos(lista_ventas)
 
 FIN
@@ -148,14 +148,19 @@ FUNCION BuscarLetra(letrasPagina,letra):BOOLEANO
 	RETORNAR encontro
 FIN FUNCION
 
-FUNCION identificar_sospechosos(ventas)
+FUNCION identificar_sospechosos(ventas)#Trabaja con la cola de revistas sospechosas
+
+	# hacer
+	# desencolar 1 revista sospechosa
+	#por cada venta en la lista
+	#obtener la venta
 
 	HACER
 		Punto1 punto1 = ObtenerPunto1()//desencolar
 
 		SI(punto1 != nulo)
 		
-			PARA (z=0, z<ventas.largo, z++) 
+			PARA (z = 1, z < = ventas.LARGO, z++) 
 
 				SI(ventas[z].nombreRevista == punto1.nombreRevista)
 			
@@ -256,7 +261,7 @@ FUNCION insertar_nodo(lista, posicion, dato)
 FIN FUNCION
 
 FUNCION eliminar_nodo(lista, posicion)
-    SI lista != NULO Y posicion >= 1 O posicion <= lista.LARGO# Validaciones antes del PARA.
+    SI lista != NULO Y posicion >= 1 O posicion <= lista.LARGO # Validaciones antes del PARA.
 		nodo_actual = lista
 		PARA (i=1; i <= posicion; i++) 
 			SI (nodo_actual != nulo)

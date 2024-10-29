@@ -13,28 +13,28 @@ INICIO
     #1. Obtiene nómina de empleados
     nomina = obtener_nomina("nomina.txt")
 
-    #2. Pedir datos de los empleados y cargar la lista
+    #Pedir datos de los empleados y cargar la lista
     cargar_datos_empleados(nomina, cantidad, lista_empleados)
 
-    #3. Calcular sueldo anual de cada empleado
+    #2. Calcular sueldo anual de cada empleado
     calcular_sueldo_anual(lista_empleados, cantidad)
 
-    #4. Suma de sueldos mensuales
+    #3. Suma de sueldos mensuales
     calcular_total_sueldos_mensuales(lista_empleados, cantidad)
 
-    #5. Máximo sueldo de cada mes
+    #4. Máximo sueldo de cada mes
     calcular_maximo_sueldo_mensual(lista_empleados, cantidad)
 
-    #6. Porcentaje que representa cada sueldo sobre el total de un mes específico
+    #5. Porcentaje que representa cada sueldo sobre el total de un mes específico
     calcular_porcentaje_sueldo(lista_empleados, cantidad, 5)
 
-    #7. Empleado que cobró el menor sueldo en el primer semestre
+    #6. Empleado que cobró el menor sueldo en el primer semestre
     calcular_menor_sueldo_semestre(lista_empleados, cantidad)
 
-    #8. Cantidad de meses en los que se pagó más de 4 millones
+    #7. Cantidad de meses en los que se pagó más de 4 millones
     calcular_cantidad_meses_mayor_4millones(lista_empleados, cantidad)
 
-    #9. Guardar sueldos anuales en archivo ordenados
+    #8. Guardar sueldos anuales en archivo ordenados
     guardar_sueldos(lista_empleados, cantidad)
 FIN 
 
