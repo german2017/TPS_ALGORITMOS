@@ -4,7 +4,7 @@ Estructura Carta
     ENTERO fuerza
     CADENA elemento
     ENTERO peso
-    ENTERO altura // En cm
+    ENTERO altura # En cm
 Fin Estructura
 
 Estructura NodoPila
@@ -41,28 +41,28 @@ INICIO
             
             a_quien_le_gana = buscar_elemento_quien_gana(elemento_jugador_1, CADENA matriz_elementos)
 
-            SI elemento_jugador_2 == a_quien_le_gana // Gano el elemento del jugador 1
-                pila_robo = &pila_jugador2  //refencio la pila robo a la pila de donde tengo que sacar dos cartas          
+            SI elemento_jugador_2 == a_quien_le_gana # Gano el elemento del jugador 1
+                pila_robo = &pila_jugador2  #refencio la pila robo a la pila de donde tengo que sacar dos cartas          
                 bandera = VERDADERO
             FIN SI
             SI bandera != VERDADERO
                 a_quien_le_gana = buscar_elemento_quien_gana(elemento_jugador_2, matriz_elementos)
-                SI elemento_jugador_1 == a_quien_le_gana // Gano el elemento del jugador 2
+                SI elemento_jugador_1 == a_quien_le_gana # Gano el elemento del jugador 2
                     pila_robo = &pila_jugador1
                 FIN SI
                 bandera = VERDADERO
             FIN SI
-            SI bandera == VERDADERO //Si alguno gano por elemento
-                //2 cartas en juego
+            SI bandera == VERDADERO #Si alguno gano por elemento
+                #2 cartas en juego
                 robo1 = Desapilar(pila_robo)
                 robo2 = Desapilar(pila_robo)
-                //le  robo 2 al 2
+                #le  robo 2 al 2
                 SI pila_mesa.LARGO > 0
                     sumar_pilas(pila_robo, pila_mesa)
                 FIN SI
                 recoger_cartas(pila_robo, carta_jugador_1, carta_jugador_2)
                 recoger_cartas(pila_robo, robo1, robo2)
-            SINO//SI NO GANO NINGUNO
+            SINO#SI NO GANO NINGUNO
                 imprimir "Hubo empate en elemento. Nadie gana"
             
         SINO

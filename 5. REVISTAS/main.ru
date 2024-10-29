@@ -149,53 +149,43 @@ FUNCION BuscarLetra(letrasPagina,letra):BOOLEANO
 FIN FUNCION
 
 FUNCION identificar_sospechosos(ventas)#Trabaja con la cola de revistas sospechosas
-
-	# hacer
-	# desencolar 1 revista sospechosa
-	#por cada venta en la lista
-	#obtener la venta
-
+	Revista una_revista
 	HACER
-		Punto1 punto1 = ObtenerPunto1()//desencolar
-
-		SI(punto1 != nulo)
-		
-			PARA (z = 1, z < = ventas.LARGO, z++) 
-
-				SI(ventas[z].nombreRevista == punto1.nombreRevista)
-			
-					SI(existeSospechoso(listaSospechosos,ventas[z].comprador))
-
-						AgregarRevistaComprada(listaSospechosos,ventas[z])
+		una_revista = desencolar_revista()
+		SI una_revista != NULO
+			PARA(ENTERO z = 1; < <= ventas.LARGO; z++)
+				SI ventas[z].nombre_revista == una_revista.nombre_revista
+					SI existeSospechoso(listaSospechosos, ventas[z].comprador)
+						AgregarRevistaComprada(listaSospechosos, ventas[z])
 					SINO
-						AgregarSospechoso(listaSospechosos,ventas[z])
-				FIN SI
-
+						AgregarSospechoso(listaSospechosos, ventas[z])
+					FIN SI
+				FIN SI	
 			FIN PARA
 		FIN SI
-
-	MIENTRAS (punto1 != nulo)
-
+	MIENTRAS una_revista != NULO
+		
+FIN FUNCION
 
 
 FUNCION existeSospechoso(listaSospechosos,nombreSospechoso):BOOLEANO
 
 	NodoSospechoso nodo_actual = listaSospechosos
 	SI(listaSospechosos==NULO)
-		RETORNAR false
+		RETORNAR FALSO
 	FIN SI
 
 	HACER
 		SI (nodo_actual.sospechoso.nombre == nombreSospechoso)
 			
-			RETORNAR true
+			RETORNAR VERDADERO
 		FIN SI
 		
 		nodo_actual = nodo_actual.siguiente
 	MIENTRAS (nodo_actual.siguiente !=nulo)
 	
-	RETORNAR false
-
+	RETORNAR FALSO
+FIN FUNCION
 
 FUNCION AgregarRevistaComprada(listaSospechosos,venta)
 	
