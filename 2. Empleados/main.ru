@@ -39,8 +39,8 @@ INICIO
 FIN 
 
 FUNCION obtener_nomina(CADENA path): CADENA[]
-    Cadena nombres[30]
-    Entero i = 1
+    CADENA nombres[30]
+    ENTERO i = 1
     ARCHIVO archivo_lectura
     CADENA nombre
     archivo_lectura = AbrirArchivo(path, "LECTURA")
@@ -56,6 +56,9 @@ FUNCION obtener_nomina(CADENA path): CADENA[]
 FIN FUNCION
 
 FUNCION cargar_datos_empleados(CADENA nomina[], ENTERO cantidad, Empleado lista_empleados[])
+    ENTERO horas
+    ENTERO valor
+    ENTERO sueldo
     PARA(ENTERO i = 1; i <= cantidad; i++)
         # Crear un nuevo empleado y asignar nombre
         lista_empleados[i].nombre = nomina[i]
@@ -83,23 +86,20 @@ FUNCION calcular_sueldo_anual(Empleado lista_empleados[], ENTERO cantidad)
         Escribir lista_empleados[i].nombre
         PARA(ENTERO  j = 1; j <= 12; j++)
             lista_empleados[i].sueldo_anual = lista_empleados[i].sueldo_anual + lista_empleados[i].matriz_datos[3][j]
-            Escribir lista_empleados[i].sueldo_anual, "\t"
+            Escribir "\t", lista_empleados[i].sueldo_anual
         FIN PARA
         Escribir ""
     FIN PARA
 FIN FUNCION
 
-FUNCION calcular_total_sueldos_mensuales(Empleado lista_empleados[], ENTERO cantidad)
-    FLOTANTE suma_anual
-    suma_anual = 0
-    PARA(ENTERO  i = 1 ; i <= cantidad; i++)
-
-        PARA(ENTERO j = 1; j <= 12; j++)
-            suma_anual = suma_anual + lista_empleados[i].matriz_datos[3][j]
+FUNCION calcular_total_sueldos_mensuales(Empleado lista_empleados[], ENTERO cantidad) 
+    FLOTANTE suma_mes
+    PARA(ENTERO j = 1; j <= 12; j++)
+        suma_mes = 0
+        PARA(ENTERO  i = 1 ; i <= cantidad; i++)
+            suma_mes = lista_empleados[i].matriz_datos[3][j]
         FIN PARA
-
-        Escribir "El sueldo anual de: ", lista_empleados[i].nombre, " es: ", suma_anual
-
+        Escribir "La suma de sueldos del mes : ", j, "es", suma_mes
     FIN PARA
 FIN FUNCION
 
@@ -147,7 +147,7 @@ FUNCION calcular_menor_sueldo_semestre(Empleado lista_empleados[], ENTERO cantid
     Escribir "Los empleados que tienen el sueldo mínimo son:"
 
     PARA(ENTERO i = 1; i <= cantidad; i++)
-        c j = 1; j <= 6; j++)
+        PARA(ENTERO j = 1; j <= 6; j++)
             SI lista_empleados[i].matriz_datos[3][j] = minimo Entonces
                 Escribir lista_empleados[i].nombre
             FIN SI
@@ -177,6 +177,7 @@ FUNCION calcular_cantidad_meses_mayor_4millones(Empleado lista_empleados[], ENTE
 FIN FUNCION
 
 FUNCION guardar_sueldos(Empleado lista_empleados[], ENTERO cantidad)
+    ARCHIVO archivo
     ordenar_lista(lista_empleados, cantidad)
 
     archivo = Abrir("liquidacion.txt", ESCRIBIR)
