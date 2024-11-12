@@ -19,10 +19,10 @@ INICIO
     #2. Calcular sueldo anual de cada empleado
     calcular_sueldo_anual(lista_empleados, cantidad)
 
-    #3. Suma de sueldos mensuales
+    #3. Calcular y mostrar el total de sueldos pagados cada mes.
     calcular_total_sueldos_mensuales(lista_empleados, cantidad)
 
-    #4. Máximo sueldo de cada mes
+    #4. Calcular y mostrar el máximo sueldo pagado en cada mes.
     calcular_maximo_sueldo_mensual(lista_empleados, cantidad)
 
     #5. Porcentaje que representa cada sueldo sobre el total de un mes específico
@@ -31,8 +31,8 @@ INICIO
     #6. Empleado que cobró el menor sueldo en el primer semestre
     calcular_menor_sueldo_semestre(lista_empleados, cantidad)
 
-    #7. Cantidad de meses en los que se pagó más de 4 millones
-    calcular_cantidad_meses_mayor_4millones(lista_empleados, cantidad)
+    #7. Cantidad de meses en los que se pagó menos de 4 millones
+    calcular_cantidad_meses_menor_4millones(lista_empleados, cantidad)
 
     #8. Guardar sueldos anuales en archivo ordenados
     guardar_sueldos(lista_empleados, cantidad)
@@ -155,7 +155,7 @@ FUNCION calcular_menor_sueldo_semestre(Empleado lista_empleados[], ENTERO cantid
     FIN PARA
 FIN FUNCION
 
-FUNCION calcular_cantidad_meses_mayor_4millones(Empleado lista_empleados[], ENTERO cantidad)
+FUNCION calcular_cantidad_meses_menor_4millones(Empleado lista_empleados[], ENTERO cantidad)
     ENTERO contador
     contador = 0
 
@@ -167,8 +167,7 @@ FUNCION calcular_cantidad_meses_mayor_4millones(Empleado lista_empleados[], ENTE
             suma_sueldos = suma_sueldos + lista_empleados[i].matriz_datos[3][mes]
         FIN PARA
 
-
-        SI suma_sueldos > 4000000 Entonces
+        SI suma_sueldos < 4000000 Entonces
             contador = contador + 1
         FIN SI
     FIN PARA
